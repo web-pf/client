@@ -1,6 +1,7 @@
-const webpackMerge = require('webpack-merge')
-const commonConf = require('./common')
-const devConf = {
+import webpackMerge from 'webpack-merge'
+import { commonConf } from './common'
+import { Configuration } from 'webpack'
+const devConf: Configuration = {
   mode: 'development',
   devtool: '#@cheap-module-eval-source-map',
   devServer: {
@@ -21,4 +22,4 @@ const devConf = {
   },
 }
 
-module.exports = webpackMerge(commonConf, devConf)
+export default webpackMerge(commonConf, devConf)

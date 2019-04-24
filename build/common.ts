@@ -1,9 +1,9 @@
-const path = require('path')
-const webpack = require('webpack')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const tsImportPluginFactory = require('ts-import-plugin')
+import path from 'path'
+import webpack, { Configuration } from 'webpack'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import tsImportPluginFactory from 'ts-import-plugin'
 
-module.exports = {
+export const commonConf:Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
     alias: {
@@ -49,7 +49,7 @@ module.exports = {
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NamedModulesPlugin(),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, '../src/static'),
+      template: path.resolve(__dirname, '../src/static/index.html'),
       title: 'WebPerf',
     }),
   ],
