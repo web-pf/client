@@ -1,0 +1,48 @@
+@import '~@/app-style.less';
+.client-header-wrapper {
+  background-color: @main-color;
+  padding: 0 16px;
+}
+.client-header {
+  height: 90px;
+  margin: 0 auto;
+  max-width: 1140px;
+  display: flex;
+  align-items: center;
+
+  h1 {
+    color: #fff;
+  }
+  nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    ul {
+      overflow: hidden;
+      list-style: none;
+      width: 100%;
+      li {
+        margin-left: 32px;
+        float: left;
+        a {
+          transition: color 500ms cubic-bezier(0.19, 1, 0.22, 1);
+          color: #fff;
+          font-weight: 600;
+
+          &:hover {
+            color: hsl(200, 100%, 40%);
+          }
+        }
+      }
+    }
+  }
+  .-divider {
+    height: 24px;
+    margin: 0 48px;
+  }
+  .-user-control {
+    * {
+      color: #fff;
+    }
+  }
+}

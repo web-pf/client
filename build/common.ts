@@ -43,6 +43,28 @@ export const commonConf:Configuration = {
         test: /\.(s)?css$/,
         use: ['style-loader', 'css-loader', 'sass-loader'],
       },
+      {
+        test: /\.less$/,
+        use: [
+          {
+            loader: 'style-loader'
+          },
+          {
+            loader: 'css-loader' // translates CSS into CommonJS
+          },
+          {
+            loader: 'less-loader', // compiles Less to CSS
+            options: {
+              modifyVars: {
+                'primary-color': '#0088cc',
+                'link-color': '#157efb',
+                'border-radius-base': '2px'
+              },
+              javascriptEnabled: true
+            }
+          }
+        ]
+      },
     ],
   },
   plugins: [
