@@ -8,15 +8,14 @@ const devConf: Configuration = {
     port: 8999,
     hot: true,
     historyApiFallback: true,
-    https: true,
     watchOptions: {
       ignored: /node_modules/,
       aggregateTimeout: 1500,
     },
     
     proxy: {
-      '/api/*/': {
-        target: 'https://webpf.net:4430',
+      '/api': {
+        target: 'http://webpf.net:4430',
         changeOrigin: true,
       },
     },

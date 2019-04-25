@@ -7,9 +7,8 @@ interface IHeaderProps extends RouteComponentProps {
   title?: string
 }
 
-function RHeader(props:IHeaderProps) {
-
-  const {title} = props
+function RHeader(props: IHeaderProps) {
+  const { title, location } = props
 
   const menu = [
     {
@@ -25,6 +24,11 @@ function RHeader(props:IHeaderProps) {
       name: 'System',
     },
   ]
+
+  const currentLocation = location.pathname.match(/\/(location)\/?/)
+
+  console.log(location.pathname)
+
   return (
     <header className="client-header-wrapper">
       <div className="client-header">
@@ -41,7 +45,7 @@ function RHeader(props:IHeaderProps) {
             })}
           </ul>
         </nav>
-        <Divider className='-divider' type="vertical" />
+        <Divider className="-divider" type="vertical" />
         <div className="-user-control">
           <Icon type="user" /> <span>张智翔</span>
         </div>

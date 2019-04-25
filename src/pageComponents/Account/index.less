@@ -3,17 +3,37 @@
 .account-wrapper {
   width: 100vw;
   height: 100vh;
-  background-color: @main-color;
   display: flex;
   justify-content: center;
   align-items: center;
 
   .section {
+    transition: 300ms;
     width: 440px;
-    padding-bottom: 64px;
+    padding: 36px;
+    background: #ffffff;
 
     .-legend {
-      color: #fff;
+      color: #000000;
     }
+
+    form {
+      & > * {
+        margin: 8px 0;
+      }
+    }
+  }
+}
+.account-known {
+  position: relative;
+  background-color: #f2f2f2;
+  padding: 12px 14px;
+  border-radius: 2px;
+  .-email {
+    font-weight: 600;
+  }
+  .-edit-email {
+    position: absolute;
+    right: 14px;
   }
 }

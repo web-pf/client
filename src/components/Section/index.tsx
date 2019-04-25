@@ -14,6 +14,7 @@ function RSection(props: ISectionProps) {
   return (
     <section className='section' {...restProps}>
       <div className="-legend">{legend}</div>
+      <div className="-description">{description}</div>
       <div className="-body">{children}</div>
     </section>
   )
