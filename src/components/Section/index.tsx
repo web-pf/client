@@ -12,7 +12,7 @@ interface ISectionProps extends RouteComponentProps {
 function RSection(props: ISectionProps) {
   const { legend, description, viewMode, children, ...restProps } = props
   return (
-    <section className='section' {...restProps}>
+    <section className='section'>
       <div className="-legend">{legend}</div>
       <div className="-description">{description}</div>
       <div className="-body">{children}</div>

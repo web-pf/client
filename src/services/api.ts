@@ -1,8 +1,9 @@
 const apiPrefix = '/api/v1'
 const apiList = {
   user: {
-    register: '/user',
-    login: '/user/authenticate',
+    register: '/user/register',
+    checkStatus: '/user/status',
+    login: '/user/login',
     current: '/user/current',
   },
 }

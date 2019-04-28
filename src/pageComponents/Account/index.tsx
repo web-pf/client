@@ -12,12 +12,35 @@ type TAccountStatus = 'UNKNOWN' | 'REGISTERED' | 'UNREGISTERED'
 
 function RAccount(props: IAccountProps) {
   const { form } = props
-  const { getFieldDecorator, validateFieldsAndScroll, getFieldsValue } = form
+  const { getFieldDecorator, validateFieldsAndScroll, getFieldsValue, getFieldsError } = form
+
+  const { email, passwords, confirmPasswords, invitationCode } = getFieldsValue()
+
+  let hasNoError = true
+  const errors = getFieldsError()
+  Object.keys(errors).every(itemKey => {
+    if (errors[itemKey]) {
+      hasNoError = false
+      return false
+    }
+    return true
+  })
+
+  const allowSubmit = {
+    UNKNOWN: email && !!email.includes('@'),
+    UNREGISTERED: email && passwords && confirmPasswords && invitationCode,
+    REGISTERED: email && passwords,
+  }
 
   const description = {
     UNKNOWN: '',
     UNREGISTERED: 'Create an account.',
     REGISTERED: '',
+  }
+  const submitButtonText = {
+    UNKNOWN: 'Done',
+    UNREGISTERED: 'Create account',
+    REGISTERED: 'Login',
   }
 
   const [accountStatus, setAccountStatus] = useState<TAccountStatus>('UNKNOWN')
@@ -27,9 +50,7 @@ function RAccount(props: IAccountProps) {
     e.preventDefault()
     validateFieldsAndScroll((err, value) => {
       if (!err) {
-        const { email, passwords } = value
-
-        console.log(value)
+        const { email, passwords, invitationCode } = value
 
         setCurrentEmail(email)
 
@@ -49,7 +70,20 @@ function RAccount(props: IAccountProps) {
               }
             })
         } else {
-          console.log(email)
+          const { email, passwords, invitationCode } = value
+          if (accountStatus === 'UNREGISTERED') {
+            services.user.register({
+              email,
+              passwords,
+              invitationCode,
+            })
+          } else {
+            const { email, passwords } = value
+            services.user.login({
+              email,
+              passwords,
+            })
+          }
         }
       }
     })
@@ -81,38 +115,55 @@ function RAccount(props: IAccountProps) {
               </a>
             </div>
           )}
-          {accountStatus === 'UNREGISTERED' &&
-            getFieldDecorator('invitationCode', {
-              rules: [
-                {
-                  required: true,
-                },
-              ],
-            })(<Input size="large" placeholder="Invitation code" />)}
-          {accountStatus !== 'UNKNOWN' &&
-            getFieldDecorator('passwords', {
-              rules: [
-                {
-                  required: true,
-                },
-              ],
-            })(<Input.Password size="large" placeholder="Passwords" />)}
-          {accountStatus === 'UNREGISTERED' &&
-            getFieldDecorator('confirmPasswords', {
-              rules: [
-                {
-                  required: true,
-                  validator: (rule, value, callback) => {
-                    const { passwords } = getFieldsValue()
-                    if (passwords === value) {
-                      callback()
-                    } else {
-                      callback('Entered passwords differ!')
-                    }
+          {accountStatus === 'UNREGISTERED' && (
+            <Form.Item>
+              {getFieldDecorator('invitationCode', {
+                rules: [
+                  {
+                    required: true,
                   },
-                },
-              ],
-            })(<Input.Password size="large" placeholder="Confirm your passwords" />)}
+                ],
+              })(<Input size="large" placeholder="Invitation code" />)}
+            </Form.Item>
+          )}
+          {accountStatus !== 'UNKNOWN' && (
+            <Form.Item>
+              {getFieldDecorator('passwords', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                ],
+              })(<Input.Password size="large" placeholder="Passwords" />)}
+            </Form.Item>
+          )}
+          {accountStatus === 'UNREGISTERED' && (
+            <Form.Item>
+              {getFieldDecorator('confirmPasswords', {
+                rules: [
+                  {
+                    required: true,
+                    validator: (rule, value, callback) => {
+                      const { passwords } = getFieldsValue()
+                      if (passwords === value) {
+                        callback()
+                      } else {
+                        callback('Entered passwords differ!')
+                      }
+                    },
+                  },
+                ],
+              })(<Input.Password size="large" placeholder="Confirm your passwords" />)}
+            </Form.Item>
+          )}
+          <Button
+            htmlType="submit"
+            size="large"
+            type="primary"
+            disabled={!hasNoError || !allowSubmit[accountStatus]}
+          >
+            {submitButtonText[accountStatus]}
+          </Button>
         </Form>
       </Section>
     </div>
