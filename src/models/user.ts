@@ -1,6 +1,7 @@
 import { Model } from 'dva'
 export interface IModelUser {
   email: string
+  nickname: string
 }
 export default {
   namespace: 'user',
@@ -9,7 +10,6 @@ export default {
   } as IModelUser,
   reducers: {
     save: (state, { payload: userInfo }) => {
-      console.log(userInfo)
       return { ...userInfo }
     },
   },

@@ -6,6 +6,9 @@ const apiList = {
     login: '/user/login',
     current: '/user/current',
   },
+  website: {
+    register: '/website'
+  }
 }
 const proxyObject = (obj: object) =>
   new Proxy<typeof obj>(obj, {

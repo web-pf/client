@@ -1,6 +1,7 @@
 import React from 'react'
-import { BrowserRouter } from 'react-router-dom'
 import dva from 'dva'
+import { HashRouter as Router } from 'react-router-dom'
+import {createHashHistory} from 'history'
 
 import { AppRouter } from './app-router'
 
@@ -8,12 +9,16 @@ if (module.hot) {
   module.hot.accept()
 }
 
-const app = dva()
+export const history = createHashHistory()
+
+const app = dva({
+  history
+})
 
 app.model(require('@/models/user').default)
 app.router(() => (
-  <BrowserRouter>
+  <Router>
     <AppRouter />
-  </BrowserRouter>
+  </Router>
 ))
 app.start('#root')

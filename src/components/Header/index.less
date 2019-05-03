@@ -1,48 +1,45 @@
 @import '~@/app-style.less';
 .client-header-wrapper {
-  background-color: @main-color;
   padding: 0 16px;
+  background: #fff;
+  box-shadow: 0 2px 8px #f0f1f2;
 }
 .client-header {
-  height: 90px;
   margin: 0 auto;
   max-width: 1140px;
   display: flex;
   align-items: center;
 
   h1 {
-    color: #fff;
+    color: #000;
+    font-size: 18px;
+    font-weight: 600;
+    width: 35%;
+
+    span {
+      font-weight: 400;
+      color: #a3b1be;
+    }
   }
   nav {
-    margin-left: auto;
-    display: flex;
-    align-items: center;
+    width: 30%;
     ul {
-      overflow: hidden;
-      list-style: none;
-      width: 100%;
-      li {
-        margin-left: 32px;
-        float: left;
-        a {
-          transition: color 500ms cubic-bezier(0.19, 1, 0.22, 1);
-          color: #fff;
-          font-weight: 600;
-
-          &:hover {
-            color: hsl(200, 100%, 40%);
-          }
-        }
-      }
+      display: inline-block;
     }
   }
   .-divider {
-    height: 24px;
+    height: 14px;
     margin: 0 48px;
   }
-  .-user-control {
-    * {
-      color: #fff;
+  .operations {
+    width: 35%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    .ant-btn {
+      width: 140px;
+      margin-left: 8px;
     }
   }
 }

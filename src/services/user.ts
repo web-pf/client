@@ -7,6 +7,7 @@ interface ICheckIsRegistered {
 }
 interface IRegister {
   email: string
+  nickname: string
   passwords: string
   invitationCode: string
 }
@@ -42,10 +43,11 @@ export const user = {
     })
   },
   register: (params: IRegister) => {
-    const { email, passwords, invitationCode } = params
+    const { email, passwords, nickname, invitationCode } = params
 
     const formdata = new FormData()
     formdata.append('email', email)
+    formdata.append('nickname', nickname)
     formdata.append('passwords', passwords)
     formdata.append('invitationCode', invitationCode)
 

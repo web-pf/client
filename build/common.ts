@@ -55,11 +55,11 @@ export const commonConf:Configuration = {
           {
             loader: 'less-loader', // compiles Less to CSS
             options: {
-              modifyVars: {
-                'primary-color': '#0088cc',
-                'link-color': '#157efb',
-                'border-radius-base': '2px'
-              },
+              // modifyVars: {
+              //   'primary-color': '#0088cc',
+              //   'link-color': '#157efb',
+              //   'border-radius-base': '2px'
+              // },
               javascriptEnabled: true
             }
           }

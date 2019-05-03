@@ -1,17 +1,21 @@
 import './index.less'
 import React, { useState, useEffect } from 'react'
-import { Form, Input, Icon, Button } from 'antd'
+import { Form, Input, Icon, Button, Spin, message } from 'antd'
 import { Section } from '@/components'
-import { withRouter, RouteComponentProps } from 'react-router'
+import { withRouter, RouteComponentProps } from 'react-router-dom'
 import { FormComponentProps } from 'antd/lib/form'
 import { services } from '@/services'
+import { Dispatch } from 'redux'
+import { connect } from 'dva'
 
-interface IAccountProps extends RouteComponentProps, FormComponentProps {}
+interface IAccountProps extends RouteComponentProps, FormComponentProps {
+  dispatch?: Dispatch
+}
 
 type TAccountStatus = 'UNKNOWN' | 'REGISTERED' | 'UNREGISTERED'
 
 function RAccount(props: IAccountProps) {
-  const { form } = props
+  const { form, dispatch, history } = props
   const { getFieldDecorator, validateFieldsAndScroll, getFieldsValue, getFieldsError } = form
 
   const { email, passwords, confirmPasswords, invitationCode } = getFieldsValue()
@@ -70,19 +74,44 @@ function RAccount(props: IAccountProps) {
               }
             })
         } else {
-          const { email, passwords, invitationCode } = value
+          const { email, nickname, passwords, invitationCode } = value
           if (accountStatus === 'UNREGISTERED') {
-            services.user.register({
-              email,
-              passwords,
-              invitationCode,
-            })
+            services.user
+              .register({
+                email,
+                passwords,
+                nickname,
+                invitationCode,
+              })
+              .then(res => {
+                const { error, msg } = res.data
+                if (!error) {
+                  message.success('Account created, please login again.')
+                  setAccountStatus('UNKNOWN')
+                } else {
+                  message.error(msg)
+                }
+              })
           } else {
             const { email, passwords } = value
-            services.user.login({
-              email,
-              passwords,
-            })
+            services.user
+              .login({
+                email,
+                passwords,
+              })
+              .then(res => {
+                const { error, email, nickname } = res.data
+                if (!error) {
+                  dispatch({
+                    type: 'user/save',
+                    payload: {
+                      email,
+                      nickname
+                    },
+                  })
+                  history.push('/')
+                }
+              })
           }
         }
       }
@@ -122,8 +151,28 @@ function RAccount(props: IAccountProps) {
                   {
                     required: true,
                   },
+                  {
+                    whitespace: false,
+                  },
                 ],
               })(<Input size="large" placeholder="Invitation code" />)}
+            </Form.Item>
+          )}
+          {accountStatus === 'UNREGISTERED' && (
+            <Form.Item>
+              {getFieldDecorator('nickname', {
+                rules: [
+                  {
+                    required: true,
+                  },
+                  {
+                    whitespace: false,
+                  },
+                  {
+                    max: 12
+                  }
+                ],
+              })(<Input size="large" placeholder="Input your nickname" />)}
             </Form.Item>
           )}
           {accountStatus !== 'UNKNOWN' && (
@@ -158,6 +207,7 @@ function RAccount(props: IAccountProps) {
           )}
           <Button
             htmlType="submit"
+            className="-submit-btn"
             size="large"
             type="primary"
             disabled={!hasNoError || !allowSubmit[accountStatus]}
@@ -170,4 +220,4 @@ function RAccount(props: IAccountProps) {
   )
 }
 
-export const Account = Form.create()(withRouter(RAccount))
+export const Account = connect()(Form.create()(withRouter(RAccount)))
