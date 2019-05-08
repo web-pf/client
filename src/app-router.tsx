@@ -29,24 +29,25 @@ function RAppRouter(props: IRouterProps) {
     }
   })
   return (
-    <Switch>
-      <Route path="/account">
-        <Account />
-      </Route>
-      <Route path="/dashboard">
-        <React.Fragment>
-          <Header />
-          <Dashboard />
-        </React.Fragment>
-      </Route>
-      <Route path="/register">
-        <React.Fragment>
-          <Header />
-          <RegisterWebsite />
-        </React.Fragment>
-      </Route>
-      <Redirect to="/dashboard" />
-    </Switch>
+    <Fragment>
+      <Header />
+      <Switch>
+        <Route path="/account">
+          <Account />
+        </Route>
+        <Route path="/dashboard">
+          <React.Fragment>
+            <Dashboard />
+          </React.Fragment>
+        </Route>
+        <Route path="/register">
+          <React.Fragment>
+            <RegisterWebsite />
+          </React.Fragment>
+        </Route>
+        <Redirect to="/dashboard" />
+      </Switch>
+    </Fragment>
   )
 }
 export const AppRouter = connect(({ user }) => ({ user }))(withRouter(RAppRouter))

@@ -12,7 +12,8 @@ const devConf: Configuration = {
       ignored: /node_modules/,
       aggregateTimeout: 1500,
     },
-    
+    disableHostCheck: true,
+    host: '0.0.0.0',
     proxy: {
       '/api': {
         target: 'http://webpf.net:4430',

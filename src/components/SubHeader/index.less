@@ -1,0 +1,40 @@
+.client-sub-header-wrapper {
+  background: #fff;
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  box-shadow: 0 2px 8px #f0f1f2;
+}
+.client-sub-header {
+  margin: 0 auto;
+  max-width: 1140px;
+  min-height: 48px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .ant-select-selection {
+    min-width: 200px;
+
+    .ant-select-selection__rendered {
+      float: right;
+    }
+    &,
+    &:active,
+    &:hover,
+    &:focus {
+      border: none !important;
+      box-shadow: none !important;
+    }
+  }
+
+  h2 {
+    margin: 0;
+    display: inline-block;
+  }
+}

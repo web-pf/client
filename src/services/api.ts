@@ -7,7 +7,12 @@ const apiList = {
     current: '/user/current',
   },
   website: {
-    register: '/website'
+    register: '/website',
+    list: '/website/list'
+  },
+  perf: {
+    nav_timing_sharing: '/perf/nav_timing_sharing',
+    nav_timing_trending: '/perf/nav_timing_trending'
   }
 }
 const proxyObject = (obj: object) =>

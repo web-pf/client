@@ -1,7 +1,22 @@
 import './index.less'
 import React, { useState } from 'react'
-import { Empty, Button, Card, PageHeader, Steps, Form, Input, message, Spin, Icon } from 'antd'
-import { Route } from 'react-router-dom'
+import clipboard from 'clipboard'
+
+import {
+  Button,
+  Alert,
+  PageHeader,
+  Steps,
+  Form,
+  Input,
+  Statistic,
+  message,
+  Spin,
+  Icon,
+  Checkbox,
+  Tag,
+  Tooltip,
+} from 'antd'
 import { FormComponentProps } from 'antd/lib/form'
 import { services } from '@/services'
 
@@ -11,7 +26,15 @@ function RRegisterWebsite(props: IRegisterWebsiteProps) {
   const { form } = props
   const { getFieldDecorator, validateFieldsAndScroll } = form
   const [currentStep, setCurrentStep] = useState(0)
+  const [currentWebsiteId, setCurrentWebsiteId] = useState<number>()
+  const [currentAppId, setAppId] = useState<number>()
   const [loading, setLoading] = useState(false)
+
+  new clipboard('#copy-app-id')
+
+  const showExpectedCopyBehavior = () => {
+    message.success('Current app ID has been successfully copied to system clipboard!')
+  }
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -25,8 +48,10 @@ function RRegisterWebsite(props: IRegisterWebsiteProps) {
             services.website
               .register(value)
               .then(res => {
-                if (!res.data.error) {
-                  setCurrentStep(2)
+                const { error, websiteId } = res.data
+                if (!error) {
+                  setCurrentStep(1)
+                  setCurrentWebsiteId(websiteId)
                 } else {
                   message.error(res.data.msg)
                 }
@@ -36,6 +61,28 @@ function RRegisterWebsite(props: IRegisterWebsiteProps) {
               })
           }
         })
+        break
+      }
+      case 1: {
+        setLoading(true)
+        services.website
+          .registerDone({
+            websiteId: currentWebsiteId,
+          })
+          .then(res => {
+            setLoading(false)
+            const { error, msg, appId } = res.data
+            if (!error) {
+              setAppId(appId)
+              setCurrentStep(2)
+            } else {
+              message.error(msg)
+            }
+          })
+        break
+      }
+      default: {
+        return
       }
     }
   }
@@ -103,15 +150,58 @@ function RRegisterWebsite(props: IRegisterWebsiteProps) {
                     />
                   )}
                 </Form.Item>
-                <Button type="primary" htmlType="submit" className="-submit-btn">
-                  Next
-                </Button>
               </React.Fragment>
             )}
+            {currentStep === 1 && (
+              <React.Fragment>
+                <Alert
+                  message="Tips"
+                  description="Heavy monitoring workload will not lead to a web performance loss."
+                  type="info"
+                  showIcon
+                />
+                <Form.Item label="Basic performance indicators">
+                  <Checkbox checked disabled>
+                    resource loading performance and api performance
+                  </Checkbox>
+                </Form.Item>
+                <Form.Item label="Unexpected behaviors.">
+                  <Checkbox checked disabled>
+                    Alarm of exceptions and asynchronous errors.
+                  </Checkbox>
+                </Form.Item>
+                <Form.Item label="React">
+                  <Checkbox checked disabled>
+                    React components rendering performance
+                  </Checkbox>
+                </Form.Item>
+              </React.Fragment>
+            )}
+            {currentStep === 2 && (
+              <React.Fragment>
+                <Alert
+                  message="Website registered."
+                  description="Please read developers' guide to connect your website to WebPF platform."
+                  type="success"
+                  showIcon
+                />
+                <Statistic
+                  title="App ID"
+                  value={currentAppId}
+                  suffix={
+                    <Tooltip title='Copy to clipboard'>
+                      <Button onClick={showExpectedCopyBehavior} id="copy-app-id" icon="copy" data-clipboard-text={currentAppId} />
+                    </Tooltip>
+                  }
+                />
+              </React.Fragment>
+            )}
+            <Button type="primary" htmlType="submit" className="-submit-btn">
+              {currentStep === 2 ? 'Go to dashboard' : 'Next'}
+            </Button>
           </Form>
         </Spin>
       </div>
-
     </div>
   )
 }

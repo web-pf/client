@@ -1,5 +1,7 @@
 import { user } from './user'
 import { website } from './website'
+import { perf } from './perf'
+
 import axios from 'axios'
 import { history } from '@/app'
 
@@ -17,4 +19,5 @@ axios.interceptors.response.use(response => {
 export const services = {
   user,
   website,
+  perf
 }

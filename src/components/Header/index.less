@@ -1,17 +1,30 @@
 @import '~@/app-style.less';
 .client-header-wrapper {
   padding: 0 16px;
-  background: #fff;
-  box-shadow: 0 2px 8px #f0f1f2;
+  background: #011528;
+  z-index: 3;
+  position: relative;
 }
 .client-header {
   margin: 0 auto;
   max-width: 1140px;
+  min-height: 54px;
   display: flex;
   align-items: center;
 
   h1 {
-    color: #000;
+    a {
+      display: inline-block;
+      color: #fff;
+      &:hover {
+        transform: scale(1.1);
+      }
+
+      &:active {
+        transform: scale(0.8);
+      }
+      transition: 200ms;
+    }
     font-size: 18px;
     font-weight: 600;
     width: 35%;
@@ -19,12 +32,21 @@
     span {
       font-weight: 400;
       color: #a3b1be;
+      margin-right: 6px;
     }
   }
   nav {
     width: 30%;
     ul {
       display: inline-block;
+    }
+    .ant-menu-item {
+      border-bottom: 4px solid transparent !important;
+      border-top: 4px solid transparent !important;
+    }
+    .ant-menu-item-selected {
+      background-color: transparent !important;
+      border-bottom: 4px solid #1890ff !important;
     }
   }
   .-divider {
@@ -36,6 +58,12 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
+
+    .-user {
+      border: none;
+      background: transparent;
+      color: white;
+    }
 
     .ant-btn {
       width: 140px;
