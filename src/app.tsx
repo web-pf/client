@@ -33,5 +33,5 @@ app.start('#root')
 // create inspector
 createInspector({
   server: 'https://webpf.net:4431',
-  appId: 'hzN2v3ufjLLQ2sP9R69ZEJ',
+  appId: 'HaZTFa7bPRhDemhjkYhEpM',
 })

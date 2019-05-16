@@ -1,27 +1,19 @@
 import axios from 'axios'
 import { api } from './api'
 
-interface IAppId {
+interface ITrending {
   appId: string
+  startDate: number
+  endDate: number
+  indicators: string
 }
 
 export const perf = {
-  navTimingSharing: (params: IAppId) => {
+  trending: (params: ITrending) => {
     return axios({
       method: 'get',
-      url: api.perf.nav_timing_sharing,
-      params: {
-        appId: params.appId,
-      },
-    })
-  },
-  navTimingTrending: (params: IAppId) => {
-    return axios({
-      method: 'get',
-      url: api.perf.nav_timing_trending,
-      params: {
-        appId: params.appId,
-      },
+      url: api.perf.trending,
+      params,
     })
   },
 }

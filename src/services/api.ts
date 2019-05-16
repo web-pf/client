@@ -11,8 +11,7 @@ const apiList = {
     list: '/website/list'
   },
   perf: {
-    nav_timing_sharing: '/perf/nav_timing_sharing',
-    nav_timing_trending: '/perf/nav_timing_trending'
+    trending: '/perf/trending'
   }
 }
 const proxyObject = (obj: object) =>

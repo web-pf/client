@@ -130,7 +130,7 @@ function RRegisterWebsite(props: IRegisterWebsiteProps) {
                     ],
                   })(<Input autoComplete="off" placeholder="A display name for this website." />)}
                 </Form.Item>
-                <Form.Item label="website name">
+                <Form.Item label="website description">
                   {getFieldDecorator('websiteDescription', {
                     rules: [
                       {

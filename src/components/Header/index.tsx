@@ -1,6 +1,6 @@
 import './index.less'
 import React, { Fragment } from 'react'
-import { Menu, Button, Tag, Dropdown, Icon } from 'antd'
+import { Menu, Button, Tag, Dropdown, Icon, Row, Col } from 'antd'
 import { Link, withRouter, RouteComponentProps } from 'react-router-dom'
 import { connect } from 'dva'
 import { IModelUser } from '@/models/user'
@@ -26,14 +26,14 @@ function RHeader(props: IHeaderProps) {
       path: '/manage',
       name: 'Manage',
     },
-    {
-      path: '/system',
-      name: 'System',
-    },
-    {
-      path: '/guide',
-      name: 'Guide',
-    },
+    // {
+    //   path: '/system',
+    //   name: 'System',
+    // },
+    // {
+    //   path: '/guide',
+    //   name: 'Guide',
+    // },
   ]
 
   const currentLocation = location.pathname.split('/')[1]
@@ -48,44 +48,53 @@ function RHeader(props: IHeaderProps) {
   return (
     <div className="client-header-wrapper">
       <header className="client-header">
-        <h1>
-          <Link to='/'>
-            WebPF<span> Monitor</span>
-          </Link>
-        </h1>
-        {currentLocation !== 'account' && (
-          <Fragment>
-            <nav>
-              <Menu theme="dark" mode="horizontal" selectedKeys={[`/${currentLocation}`]}>
-                {menu.map(menuItem => {
-                  const { path, name } = menuItem
-                  return (
-                    <MenuItem key={path}>
-                      <Link to={path}>{name}</Link>
-                    </MenuItem>
-                  )
-                })}
-              </Menu>
-            </nav>
-            <div className="operations">
-              <Dropdown overlay={userMenu} className="-user">
-                <Button icon="user">
-                  {nickname} <Icon type="down" />
-                </Button>
-              </Dropdown>
-              <Button
-                className="reg-new-btn"
-                type="primary"
-                icon="plus"
-                onClick={() => {
-                  history.push('/register')
-                }}
-              >
-                Website
-              </Button>
-            </div>
-          </Fragment>
-        )}
+        <Row>
+          <Col xs={24} xl={8}>
+            <h1>
+              <Link to="/">
+                WebPF<span> Monitor</span>
+              </Link>
+            </h1>
+          </Col>
+          {currentLocation !== 'account' && (
+            <Fragment>
+              <Col xs={0} xl={8}>
+                <nav>
+                  <Menu theme="dark" mode="horizontal" selectedKeys={[`/${currentLocation}`]}>
+                    {menu.map(menuItem => {
+                      const { path, name } = menuItem
+                      return (
+                        <MenuItem key={path}>
+                          <Link to={path}>{name}</Link>
+                        </MenuItem>
+                      )
+                    })}
+                  </Menu>
+                </nav>
+              </Col>
+
+              <Col xs={0} xl={8}>
+                <div className="operations">
+                  <Dropdown overlay={userMenu} className="-user">
+                    <Button icon="user">
+                      {nickname} <Icon type="down" />
+                    </Button>
+                  </Dropdown>
+                  <Button
+                    className="reg-new-btn"
+                    type="primary"
+                    icon="plus"
+                    onClick={() => {
+                      history.push('/register')
+                    }}
+                  >
+                    Website
+                  </Button>
+                </div>
+              </Col>
+            </Fragment>
+          )}
+        </Row>
       </header>
     </div>
   )

@@ -19,12 +19,9 @@ interface IDashboardProps {
   websites: IModelWebsite[]
 }
 
-type TNavgationTimingTabKeys = 'sharing' | 'timing'
-
 function RDashboard(props: IDashboardProps) {
   const { dispatch, websites } = props
   const [currentWebsite, setCurrentWebsite] = useState<any>()
-  const [navigationTimingKey, setNavigationTimingKey] = useState<TNavgationTimingTabKeys>('sharing')
 
   const hasNoWebsites = websites && !websites.length
 
@@ -48,17 +45,6 @@ function RDashboard(props: IDashboardProps) {
       setCurrentWebsite(websites[0])
     }
   })
-
-  const tabList = [
-    {
-      key: 'sharing',
-      tab: 'Sharing',
-    },
-    {
-      key: 'trending',
-      tab: 'Trending',
-    },
-  ]
 
   return (
     <Fragment>
@@ -86,23 +72,13 @@ function RDashboard(props: IDashboardProps) {
       <div className="client-dashboard client-body">
         {hasNoWebsites && <Placeholder />}
         {!hasNoWebsites && currentWebsite && (
-          <Row gutter={12}>
-            <Col span={16}>
-              <Card
-                activeTabKey={navigationTimingKey}
-                title="Navigation Timing"
-                className="-overview"
-                tabList={tabList}
-                onTabChange={(key: TNavgationTimingTabKeys) => setNavigationTimingKey(key)}
-              >
-                {navigationTimingKey === 'sharing' ? (
-                  <NavSharing appId={currentWebsite.appId} />
-                ) : (
-                  <NavTrending appId={currentWebsite.appId} />
-                )}
+          <Row gutter={12} >
+            <Col xs={24} xl={16} order={2}>
+              <Card title="Trending" className="-overview">
+                <NavTrending appId={currentWebsite.appId} />
               </Card>
             </Col>
-            <Col span={8}>
+            <Col xs={24} xl={8} order={1}>
               <WebsiteInfo info={currentWebsite} />
               <Card title="">No alerts</Card>
             </Col>

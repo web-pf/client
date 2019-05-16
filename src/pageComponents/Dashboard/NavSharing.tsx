@@ -73,10 +73,10 @@ const RNavSharing = (props: INavTimingProps) => {
           return parseInt(val * 100) + '%'
         },
       })
-    chart.guide().html({
-      position: ['50%', '50%'],
-      html: '<div class="g2-guide-html"><p class="title">总计</p><p class="value">19670</p></div>',
-    })
+    // chart.guide().html({
+    //   position: ['50%', '50%'],
+    //   html: '<div class="g2-guide-html"><p class="title">总计</p><p class="value">19670</p></div>',
+    // })
     chart.render()
     //draw label
     var OFFSET = 20
