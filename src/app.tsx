@@ -6,6 +6,12 @@ import { createInspector } from '../../inspector/dist'
 
 import { AppRouter } from './app-router'
 
+// create inspector
+createInspector({
+  server: 'https://webpf.net:4431',
+  appId: 'HaZTFa7bPRhDemhjkYhEpM',
+})
+
 if (module.hot) {
   module.hot.accept()
 }
@@ -30,8 +36,4 @@ app.router(() => (
 //
 app.start('#root')
 
-// create inspector
-createInspector({
-  server: 'https://webpf.net:4431',
-  appId: 'HaZTFa7bPRhDemhjkYhEpM',
-})
+

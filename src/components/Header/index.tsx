@@ -23,17 +23,13 @@ function RHeader(props: IHeaderProps) {
       name: 'Dashboard',
     },
     {
-      path: '/manage',
-      name: 'Manage',
+      path: '/errors',
+      name: 'Errors',
     },
-    // {
-    //   path: '/system',
-    //   name: 'System',
-    // },
-    // {
-    //   path: '/guide',
-    //   name: 'Guide',
-    // },
+    {
+      path: '/websites',
+      name: 'Websites',
+    },
   ]
 
   const currentLocation = location.pathname.split('/')[1]
@@ -52,8 +48,8 @@ function RHeader(props: IHeaderProps) {
           <Col xs={24} xl={8}>
             <h1>
               <Link to="/">
-                WebPF<span> Monitor</span>
-              </Link>
+                Testflight<span> Monitor</span>
+              </Link> 
             </h1>
           </Col>
           {currentLocation !== 'account' && (

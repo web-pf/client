@@ -16,7 +16,7 @@ const devConf: Configuration = {
     host: '0.0.0.0',
     proxy: {
       '/api': {
-        target: 'http://webpf.net:4430',
+        target: 'http://webpf.net',
         changeOrigin: true,
       },
     },

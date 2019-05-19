@@ -11,7 +11,12 @@ const apiList = {
     list: '/website/list'
   },
   perf: {
-    trending: '/perf/trending'
+    trending: '/perf/trending',
+    resource: '/perf/resource'
+  },
+  error: {
+    list: '/error/list',
+    recent: '/error/recent'
   }
 }
 const proxyObject = (obj: object) =>

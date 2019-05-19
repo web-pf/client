@@ -1,7 +1,7 @@
 import React, { useEffect, useState, Fragment } from 'react'
 import { Spin, Icon, DatePicker, Select, Form, Row, Col } from 'antd'
 import moment from 'moment'
-import { Chart } from '@antv/g2'
+import { Chart, Global } from '@antv/g2'
 import DataSet from '@antv/data-set'
 
 import { randomString } from '@/utils/random-string'
@@ -18,109 +18,126 @@ const { Option } = Select
 const options = [
   {
     key: 'dns',
-    name: 'DNS Lookup',
+    name: 'DNS',
   },
   {
     key: 'tcp',
-    name: 'TCP connection',
+    name: 'TCP',
   },
   {
     key: 'response',
-    name: 'Response duration',
+    name: 'Response',
   },
   {
     key: 'dom',
-    name: 'DOM rendering',
+    name: 'DOM',
   },
   {
     key: 'total',
-    name: 'Total timing',
+    name: 'Total',
   },
 ]
 const defaultDateRangeValue = [moment().startOf('week'), moment().endOf('week')]
+const defaultIndicators = ['total', 'dns', 'dom', 'response', 'tcp']
+let trendingChart: Chart
+const slotId = randomString()
 const RNavTrending = (props: INavTimingProps) => {
-  const slotId = randomString()
-
   const { appId } = props
 
-  const [hasData, setHasData] = useState(false)
-  const [isInitialMount, setIsInitialMount] = useState(true)
+  const [loading, setLoading] = useState(true)
 
   const [dateRange, setDateRange] = useState<moment.Moment[]>(defaultDateRangeValue)
-  const [indicators, setIndicators] = useState<string[]>(['total'])
+  const [indicators, setIndicators] = useState<string[]>(defaultIndicators)
 
   const updateGraph = () => {
-    services.perf.trending({
-      appId,
-      startDate: dateRange[0].unix(),
-      endDate: dateRange[1].unix(),
-      indicators: indicators.join(','),
-    })
+    services.perf
+      .trending({
+        appId,
+        startDate: dateRange[0].unix(),
+        endDate: dateRange[1].unix(),
+        indicators: indicators.join(','),
+      })
+      .then(res => {
+        const { error, msg, content } = res.data
+        if (error) {
+          message.error(msg)
+        } else {
+          renderChart(content)
+        }
+      })
+      .finally(() => setLoading(false))
   }
   useEffect(() => {
-    updateGraph()
+    if (loading) {
+      updateGraph()
+    }
   })
-  // useEffect(() => {
-  //   if (isInitialMount) {
-  //     services.perf.navTimingTrending({ appId }).then(res => {
-  //       const { content, error, msg } = res.data
-  //       if (!error) {
-  //         renderChart(content)
-  //       } else {
-  //         message.error(msg)
-  //       }
-  //     })
-  //   }
-  // })
 
   const renderChart = (data: any[]) => {
-    const ticks = []
-    // Array.from(new Array(Math.floor(data.length / 10)).keys()).forEach(key => {
-    //   ticks.push(data[key * 10]['date'])
-    // })
-
-    var chart = new Chart({
-      container: slotId,
+    if (trendingChart) {
+      trendingChart.changeData(data)
+      return
+    }
+    trendingChart = new Chart({
+      container: document.getElementById(slotId) as any,
       forceFit: true,
-      height: 400,
+      height: 300,
     })
-    chart.source(data)
-    chart.scale('value', {
-      min: 0,
-    })
-    chart.scale('date', {
-      min: 0,
-      range: [0, 1],
-      ticks,
-      alias: 'Date',
-    })
-
-    chart.tooltip({
-      crosshairs: {
-        type: 'line',
+    trendingChart.axis('date', {
+      label: null,
+      title: {
+        textStyle: {
+          fontSize: 12, // 文本大小
+          textAlign: 'center', // 文本对齐方式
+          fill: '#999', // 文本颜色
+        },
       },
     })
-    chart.line().position('date*time used')
-    chart
-      .point()
-      .position('date*time used')
-      .size(4)
-      .shape('circle')
-      .style({
-        stroke: '#fff',
-        lineWidth: 1,
-      })
-    chart.render()
+
+    trendingChart.axis('value', {
+      title: {
+        textStyle: {
+          fontSize: 12, // 文本大小
+          textAlign: 'center', // 文本对齐方式
+          fill: '#999', // 文本颜色
+        },
+      },
+    })
+    trendingChart.scale('value', {
+      alias: 'time used (ms)',
+    })
+    trendingChart.source(data, {
+      value: {
+        formatter: (val: number) => val.toFixed(2),
+      },
+    })
+    trendingChart
+      .line()
+      .position('date*value')
+      .color('type', [
+        '#ff4d4f',
+        '#ff7a45',
+        '#ffa940',
+        '#facc14',
+        '#bae637',
+        '#73d13d',
+        '#36cfc9',
+        '#40a9ff',
+      ])
+    trendingChart.render()
   }
 
   return (
     <Fragment>
-      <Row>
-        <Col xs={24} xl={12}>
+      <Row gutter={32}>
+        <Col xs={24} xl={10}>
           <Item label="Date Range">
             <RangePicker
               defaultValue={defaultDateRangeValue as any}
-              onChange={val => setDateRange(val)}
+              onChange={val => {
+                setDateRange(val)
+                setLoading(true)
+              }}
               ranges={{
                 Today: [moment().startOf('day'), moment().endOf('day')],
                 'This Week': defaultDateRangeValue as any,
@@ -130,12 +147,15 @@ const RNavTrending = (props: INavTimingProps) => {
             />
           </Item>
         </Col>
-        <Col xs={24} xl={12}>
+        <Col xs={24} xl={14}>
           <Item label="Indicators">
             <Select
               mode="tags"
-              defaultValue={['total']}
-              onChange={val => setIndicators(val as any)}
+              defaultValue={defaultIndicators}
+              onChange={val => {
+                setIndicators(val as any)
+                setLoading(true)
+              }}
             >
               {options.map(item => {
                 const { name, key } = item
@@ -146,7 +166,7 @@ const RNavTrending = (props: INavTimingProps) => {
         </Col>
       </Row>
 
-      <Spin spinning={!hasData} indicator={<Icon type="loading" />}>
+      <Spin delay={200} spinning={loading} indicator={<Icon type="loading" />}>
         <div className="-nav-timing" id={slotId} />
       </Spin>
     </Fragment>

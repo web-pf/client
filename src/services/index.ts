@@ -1,6 +1,7 @@
 import { user } from './user'
 import { website } from './website'
 import { perf } from './perf'
+import { error } from './error'
 
 import axios from 'axios'
 import { history } from '@/app'
@@ -10,7 +11,7 @@ axios.defaults.validateStatus = () => {
 }
 
 axios.interceptors.response.use(response => {
-  if(response.status === 403) {
+  if (response.status === 403) {
     history.push('/account')
   }
   return response
@@ -19,5 +20,6 @@ axios.interceptors.response.use(response => {
 export const services = {
   user,
   website,
-  perf
+  perf,
+  error,
 }
