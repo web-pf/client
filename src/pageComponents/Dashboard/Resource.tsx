@@ -63,7 +63,7 @@ const RResource = (props: INavTimingProps) => {
   }
   const renderChart = (data: any[]) => {
     const dv = genData(data)
-    if (resChart) {
+    if (resChart && document.querySelector(`#${slotId} canvas`)) {
       resChart.changeData(dv)
       return
     }

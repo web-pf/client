@@ -1,4 +1,4 @@
 export const randomString = () =>
-  Math.random()
+  'slot_' + Math.random()
     .toString(32)
     .slice(2, 10)

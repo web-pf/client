@@ -15,7 +15,14 @@ interface IHeaderProps extends RouteComponentProps {
 function RHeader(props: IHeaderProps) {
   const { title, location, history, user } = props
 
-  const { email, nickname } = user
+  const { email, nickname, privilegeCode } = user
+
+  const isGuest = privilegeCode === 0
+
+  const logOut = () => {
+    document.cookie = 'auth_token=;expires=Thu, 01 Jan 1970 00:00:00 GMT'
+    history.push('/account')
+  }
 
   const menu = [
     {
@@ -36,8 +43,9 @@ function RHeader(props: IHeaderProps) {
 
   const userMenu = (
     <Menu>
-      <Menu.Item key="1">用户中心</Menu.Item>
-      <Menu.Item key="2">注销</Menu.Item>
+      <Menu.Item key="2" onClick={logOut}>
+        Switch account
+      </Menu.Item>
     </Menu>
   )
 
@@ -48,8 +56,12 @@ function RHeader(props: IHeaderProps) {
           <Col xs={24} xl={8}>
             <h1>
               <Link to="/">
-                Testflight<span> Monitor</span>
-              </Link> 
+                WebPF
+                <span>
+                  {' '}
+                  Monitor<sup>BETA</sup>
+                </span>
+              </Link>
             </h1>
           </Col>
           {currentLocation !== 'account' && (
@@ -80,6 +92,7 @@ function RHeader(props: IHeaderProps) {
                     className="reg-new-btn"
                     type="primary"
                     icon="plus"
+                    disabled={isGuest}
                     onClick={() => {
                       history.push('/register')
                     }}

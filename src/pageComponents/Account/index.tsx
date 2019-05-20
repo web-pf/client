@@ -49,7 +49,26 @@ function RAccount(props: IAccountProps) {
 
   const [accountStatus, setAccountStatus] = useState<TAccountStatus>('UNKNOWN')
   const [currentEmail, setCurrentEmail] = useState<string>()
-
+  const guestLogin = e => {
+    e.preventDefault()
+    services.user.login({
+      email: 'guest@webpf.net',
+      passwords: 'guest'
+    }).then(res => {
+      const { error, email, nickname, privilegeCode } = res.data
+      if (!error) {
+        dispatch({
+          type: 'user/save',
+          payload: {
+            email,
+            nickname,
+            privilegeCode
+          },
+        })
+        history.push('/')
+      }
+    })
+  }
   const submit = e => {
     e.preventDefault()
     validateFieldsAndScroll((err, value) => {
@@ -82,6 +101,7 @@ function RAccount(props: IAccountProps) {
                 passwords,
                 nickname,
                 invitationCode,
+                privilegeCode: 1
               })
               .then(res => {
                 const { error, msg } = res.data
@@ -106,7 +126,7 @@ function RAccount(props: IAccountProps) {
                     type: 'user/save',
                     payload: {
                       email,
-                      nickname
+                      nickname,
                     },
                   })
                   history.push('/')
@@ -169,8 +189,8 @@ function RAccount(props: IAccountProps) {
                     whitespace: false,
                   },
                   {
-                    max: 12
-                  }
+                    max: 12,
+                  },
                 ],
               })(<Input size="large" placeholder="Input your nickname" />)}
             </Form.Item>
@@ -214,8 +234,10 @@ function RAccount(props: IAccountProps) {
           >
             {submitButtonText[accountStatus]}
           </Button>
+          
         </Form>
       </Section>
+      <a className='login-to-guest' onClick={guestLogin}>Login to guest</a>
     </div>
   )
 }

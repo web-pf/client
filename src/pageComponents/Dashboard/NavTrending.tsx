@@ -74,7 +74,7 @@ const RNavTrending = (props: INavTimingProps) => {
   })
 
   const renderChart = (data: any[]) => {
-    if (trendingChart) {
+    if (trendingChart && document.querySelector(`#${slotId} canvas`)) {
       trendingChart.changeData(data)
       return
     }

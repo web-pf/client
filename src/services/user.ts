@@ -10,10 +10,11 @@ interface IRegister {
   nickname: string
   passwords: string
   invitationCode: string
+  privilegeCode: number
 }
 interface ILogin {
   email: string
-  passwords: string
+  passwords?: string
 }
 
 export const user = {
@@ -43,13 +44,14 @@ export const user = {
     })
   },
   register: (params: IRegister) => {
-    const { email, passwords, nickname, invitationCode } = params
+    const { email, passwords, nickname, invitationCode, privilegeCode } = params
 
     const formdata = new FormData()
     formdata.append('email', email)
     formdata.append('nickname', nickname)
     formdata.append('passwords', passwords)
     formdata.append('invitationCode', invitationCode)
+    formdata.append('privilegeCode', String(privilegeCode))
 
     return axios({
       method: 'PUT',

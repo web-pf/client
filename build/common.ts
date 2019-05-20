@@ -3,7 +3,7 @@ import webpack, { Configuration } from 'webpack'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import tsImportPluginFactory from 'ts-import-plugin'
 
-export const commonConf:Configuration = {
+export const commonConf: Configuration = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx', '.scss'],
     alias: {
@@ -12,6 +12,7 @@ export const commonConf:Configuration = {
   },
   entry: {
     app: path.resolve(__dirname, '../src/app.tsx'),
+    vendors: ['react', 'react-dom', 'antd', '@antv/g2', 'dva'],
   },
   output: {
     path: path.resolve(__dirname, '../dist'),
@@ -47,10 +48,10 @@ export const commonConf:Configuration = {
         test: /\.less$/,
         use: [
           {
-            loader: 'style-loader'
+            loader: 'style-loader',
           },
           {
-            loader: 'css-loader' // translates CSS into CommonJS
+            loader: 'css-loader', // translates CSS into CommonJS
           },
           {
             loader: 'less-loader', // compiles Less to CSS
@@ -60,10 +61,10 @@ export const commonConf:Configuration = {
               //   'link-color': '#157efb',
               //   'border-radius-base': '2px'
               // },
-              javascriptEnabled: true
-            }
-          }
-        ]
+              javascriptEnabled: true,
+            },
+          },
+        ],
       },
     ],
   },

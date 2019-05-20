@@ -1,3 +1,5 @@
 .DS_STORE
 node_modules
 dist
+**/ssl/ssl.crt
+**/ssl/ssl.key

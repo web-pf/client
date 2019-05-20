@@ -2,6 +2,7 @@ import { Model } from 'dva'
 export interface IModelUser {
   email: string
   nickname: string
+  privilegeCode: number
 }
 export default {
   namespace: 'user',
