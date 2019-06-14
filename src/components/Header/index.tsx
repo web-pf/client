@@ -53,7 +53,7 @@ function RHeader(props: IHeaderProps) {
     <div className="client-header-wrapper">
       <header className="client-header">
         <Row>
-          <Col xs={24} xl={8}>
+          <Col xs={24} md={8}>
             <h1>
               <Link to="/">
                 WebPF
@@ -66,7 +66,7 @@ function RHeader(props: IHeaderProps) {
           </Col>
           {currentLocation !== 'account' && (
             <Fragment>
-              <Col xs={0} xl={8}>
+              <Col xs={0} md={8}>
                 <nav>
                   <Menu theme="dark" mode="horizontal" selectedKeys={[`/${currentLocation}`]}>
                     {menu.map(menuItem => {
@@ -81,7 +81,7 @@ function RHeader(props: IHeaderProps) {
                 </nav>
               </Col>
 
-              <Col xs={0} xl={8}>
+              <Col xs={0} md={8}>
                 <div className="operations">
                   <Dropdown overlay={userMenu} className="-user">
                     <Button icon="user">
